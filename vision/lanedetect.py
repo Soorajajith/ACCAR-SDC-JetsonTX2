@@ -650,7 +650,7 @@ def create_final_image2(img,leftLine, rightLine, show_images=False):
     cv2.polylines(color_warp, np.int32([pts_path]), isClosed=False, color=(255,0,0), thickness=10)
     # Warp the blank back to original image space using inverse perspective matrix (Minv)
     newwarp = unwarp(color_warp)
-    
+
     # Combine the result with the original image
     result = cv2.addWeighted(warper(img), 1, color_warp, 0.5, 0)
     result = add_points(result, dst)
