@@ -1,11 +1,15 @@
-/* Arduino UNO with W5100 Ethernetshield or  W5100 Ethernet module, used as MQTT client */
+/* Arduino UNO with W5100 Ethernetshield or W5100 Ethernet module, used as MQTT client */
 // http://www.instructables.com/id/Arduino-Ethernet-Shield-Tutorial/
+// MQTT with Arduino Ethernet Shield Youtube
+// https://www.youtube.com/watch?v=CjG0JXCGye0
 #include <Ethernet.h>
 #include "PubSubClient.h" 
+
 #define CLIENT_ID       "ACCAR"
 #define PUBLISH_DELAY   3000 // 3 seconds interval
 #define ledPin 13
 #define relayPin 8
+
 String ip = "";
 bool statusKD = HIGH;
 bool statusBD = HIGH;
@@ -14,8 +18,17 @@ bool relaystate = LOW;
 bool pir = LOW;
 bool startsend = HIGH;// flag for sending at startup
 int lichtstatus;      //contains LDR reading
+
+
+/* Enter a MAC address for your controller below.
+   Newer Ethernet shield have a MAC address printed on a stiker on the shield
+*/
 uint8_t mac[6] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x06};
 
+/* Initialize the Ethernet client library
+   with the IP address and port of the server
+   that you want to connect to (port 80 is default for HTTP):
+*/
 EthernetClient ethClient;
 PubSubClient mqttClient;
 
@@ -36,38 +49,31 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
 void setup() {
 
-  // setup serial communication
-
+  // start the serial library:
   Serial.begin(9600);
-  while (!Serial) {};
-  Serial.println(F("MQTT Arduino Demo"));
-  Serial.println();
 
-  // setup ethernet communication using DHCP
+  while (!Serial) {};
+  Serial.println("MQTT Arduino Demo start!");
+
+  // start the Ethernet connection:
   if (Ethernet.begin(mac) == 0) {
-    //Serial.println(F("Unable to configure Ethernet using DHCP"));
+    Serial.println("Failed to configure Ethernet using DHCP");
+	// no point in carrying on, so do nothing forevermore:
     for (;;);
   }
 
-  Serial.println(F("Ethernet configured via DHCP"));
-  Serial.print("IP address: ");
+  // print your local IP address:
   Serial.println(Ethernet.localIP());
-  Serial.println();
- //convert ip Array into String
-  ip = String (Ethernet.localIP()[0]);
-  ip = ip + ".";
-  ip = ip + String (Ethernet.localIP()[1]);
-  ip = ip + ".";
-  ip = ip + String (Ethernet.localIP()[2]);
-  ip = ip + ".";
-  ip = ip + String (Ethernet.localIP()[3]);
-  //Serial.println(ip);
 
   // setup mqtt client
   mqttClient.setClient(ethClient);
+
+  /* Creates an uninitialised client instance.
+     Before it can be used, it must be configured with the property setters: */
   // mqttClient.setServer("test.mosquitto.org", 1883);//use public broker
   mqttClient.setServer( "192.168.1.102", 1883); // or local broker
-  //Serial.println(F("MQTT client configured"));
+  // client is now configured for use
+
   mqttClient.setCallback(callback);
  
   previousMillis = millis();
