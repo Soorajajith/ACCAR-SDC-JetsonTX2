@@ -8,7 +8,6 @@ void pabort(const char *s)
 
 void transfer(int fd, char* tx, int len)  
 {  
-    int ret;  
     uint8_t rx[256];  
     struct spi_ioc_transfer tr = {  
         .tx_buf = (unsigned long)tx,  
@@ -18,6 +17,7 @@ void transfer(int fd, char* tx, int len)
         .speed_hz = speed,  
         .bits_per_word = bits,  
     };  
+    int ret;  
   
     ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);  
     if (ret < 1)  
@@ -25,7 +25,7 @@ void transfer(int fd, char* tx, int len)
  
     for (ret = 0; ret < len; ret++)   
         printf("%c", rx[ret]);  
-    puts("\n");  
+	printf("\n");
 }  
   
 void setSPI()
