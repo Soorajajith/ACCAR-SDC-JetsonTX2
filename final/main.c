@@ -4,6 +4,8 @@ int main()
 {
 	pthread_t thread;
 
+	setSPI();
+
 	if(pthread_create(&thread, NULL, do_socket, NULL) < 0){
 		printf("thread create error\n");
 		exit(0);
@@ -11,6 +13,8 @@ int main()
 
 	for(;;);
 }
+
+
 
 
 void *do_socket(void *arg)
@@ -33,10 +37,10 @@ void *do_socket(void *arg)
 	}
 
 	memset(&server_addr, 0, sizeof(server_addr));
-	server_addr.sin_family = AF_INET;	// IPv4 인터넷 프로토콜
+	server_addr.sin_family = AF_INET;	
 	server_addr.sin_port = htons(atoi(PORT));
-	server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-//	server_addr.sin_addr.s_addr = inet_addr(IP_ADDR);
+//	server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+	server_addr.sin_addr.s_addr = inet_addr(IP_ADDR);
 
 
 	if(-1 == bind(server_socket, (struct sockaddr*)&server_addr, sizeof(server_addr))){
@@ -54,7 +58,6 @@ void *do_socket(void *arg)
 	{
 		client_addr_size = sizeof(client_addr);
 		
-		// 클라이언트와 통신 하기 위해 커널이 자동으로 소켓 생성->client_addr
 		client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_size);
 
 		if(-1 == client_socket){
@@ -62,9 +65,15 @@ void *do_socket(void *arg)
 			exit(1);
 		}
 
+		memset(buff_rcv, 0, sizeof(buff_rcv));
 		read(client_socket, buff_rcv, BUFF_SIZE);
-		printf("receive: %s\n", buff_rcv);
-	//	write(client_socket, buff_snd, strlen(buff_snd) + 1);
+
+		// DEBUG
+//		printf("receive: %s\n", buff_rcv);
+
+		// transfer data to Arduino
+		transfer(fd_spi, buff_rcv, BUFF_SIZE);
+
 		close(client_socket);
 	}
 
