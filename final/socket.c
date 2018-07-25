@@ -51,8 +51,10 @@ void *do_socket(void *arg)
 		memset(buff_rcv, 0, sizeof(buff_rcv));
 		read(client_socket, buff_rcv, BUFF_SIZE);
 
+		buff_rcv[strlen(buff_rcv) - 1] = '\0';
+
 		// DEBUG
-//		printf("SOCKET: %s\n", buff_rcv);
+		printf("SOCKET: %s\n", buff_rcv);
 
 		// transfer data to Arduino
 		transfer(fd_spi, buff_rcv, BUFF_SIZE);
@@ -61,3 +63,14 @@ void *do_socket(void *arg)
 	}
 
 }
+/*
+char *change2number(char *str)
+{
+	if(strcmp(str, "고\n") == 0)
+		return "101";
+	if(strcmp(str, "오른쪽\n") == 0)
+		return "103";
+	if(strcmp(str, "왼쪽\n") == 0)
+		return "104";
+}
+*/

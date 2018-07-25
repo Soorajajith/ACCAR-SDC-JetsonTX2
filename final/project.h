@@ -21,6 +21,7 @@
 static const char *IP_ADDR   = "192.168.43.160";
 static const char *PORT      = "8888";
 void *do_socket(void *arg);
+char *change2number(char *str);
 
 
 // SPI

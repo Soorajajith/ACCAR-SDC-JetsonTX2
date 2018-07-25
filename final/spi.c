@@ -22,7 +22,8 @@ void transfer(int fd, char* tx, int len)
     ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);  
     if (ret < 1)  
         pabort("can't send spi message");  
- 
+	
+	printf("IN SPI FILE: ");
     for (ret = 0; ret < len; ret++)   
         printf("%c", rx[ret]);  
 	printf("\n");

@@ -16,7 +16,8 @@ src = np.float32([
 
 # You can Quit with pushing ESC
 def show_webcam(mirror=False,lane=False):
-    cam = cv2.VideoCapture(0)
+    # cam = cv2.VideoCapture(0)
+    cam = cv2.VideoCapture(1)
     #3. CV_CAP_PROP_POS_AVI_RATIO Relative position of the video file
     #4. CV_CAP_PROP_FRAME_WIDTH Width of the frames in the video stream.
     #5. CV_CAP_PROP_FRAME_HEIGHT Height of the frames in the video stream.
