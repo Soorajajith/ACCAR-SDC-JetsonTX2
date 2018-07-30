@@ -11,6 +11,7 @@ socket.o: project.h socket.c
 	gcc -c socket.c
 
 clean:
+	rm socket.o
 	rm main.o
 	rm spi.o
 	rm ACCAR
