@@ -6,6 +6,7 @@ void pabort(const char *s)
 	abort();
 }
 
+
 void transfer(int fd, char* tx, int len)  
 {  
     uint8_t rx[256];  
@@ -19,6 +20,8 @@ void transfer(int fd, char* tx, int len)
     };  
     int ret;  
   
+	printf("tx: %s\n", tx);
+
     ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);  
     if (ret < 1)  
         pabort("can't send spi message");  
@@ -28,13 +31,14 @@ void transfer(int fd, char* tx, int len)
         printf("%c", rx[ret]);  
 	printf("\n");
 }  
-  
+
 void setSPI()
 {  
     int ret = 0;  
   
  
     fd_spi = open(device, O_RDWR);  
+	printf("fd_spi is : %d\n", fd_spi);
 
     if (fd_spi < 0)  
         pabort("can't open device");  

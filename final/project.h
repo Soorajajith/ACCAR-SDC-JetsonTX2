@@ -35,3 +35,5 @@ int fd_spi;
 void pabort(const char *s);
 void transfer(int fd, char* tx, int len);
 void setSPI();
+
+void print_py(void);
