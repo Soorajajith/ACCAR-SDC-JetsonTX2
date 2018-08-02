@@ -56,9 +56,9 @@ def add_lines(img, src):
 # Pipeline combining color and gradient thresholding
 def thresholding_pipeline(img, s_thresh=(90, 255), sxy_thresh=(20, 100)):
 
-    img = np.copy(img).astype(np.float32)
+    img = np.copy(img)
     # 1: Convert to HSV color space and separate the V channel
-    hls = cv2.cvtColor(img, cv2.COLOR_RGB2HLS).astype(np.float32)
+    hls = cv2.cvtColor(img, cv2.COLOR_RGB2HLS).astype(np.uint8)
     h_channel = hls[:, :, 0]
     l_channel = hls[:, :, 1]
     s_channel = hls[:, :, 2]
